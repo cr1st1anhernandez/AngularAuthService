@@ -1,3 +1,15 @@
+@import "../node_modules/@fontsource-variable/orbitron/wght.css";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+* {
+  font-family: "Orbitron Variable", sans-serif;
+}
+
+html {
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+}
