@@ -7,9 +7,11 @@ export const eyeOpenIcon = `
 
 export const eyeClosedIcon = `
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#9b9b9b" fill="none">
-    <path d="M22 12C22 12.3155 21.848 12.5287 21.544 12.955C20.1779 14.8706 16.6892 19 12 19C7.31078 19 3.8221 14.8706 2.45604 12.955C2.15201 12.5287 2 12.3155 2 12C2 11.6845 2.15201 11.4713 2.45604 11.045C3.8221 9.12944 7.31078 5 12 5C16.6892 5 20.1779 9.12944 21.544 11.045C21.848 11.4713 22 11.6845 22 12Z" stroke="currentColor" stroke-width="1.5" />
-    <path d="M15 12C15 10.3431 13.6569 9 12 9C10.3431 9 9 10.3431 9 12C9 13.6569 10.3431 15 12 15C13.6569 15 15 13.6569 15 12Z" stroke="currentColor" stroke-width="1.5" />
-    <path d="M6.34315 6.34315L17.6569 17.6569" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+    <path d="M22 8C22 8 18 14 12 14C6 14 2 8 2 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+    <path d="M15 13.5L16.5 16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M20 11L22 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M2 13L4 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M9 13.5L7.5 16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
 </svg>
 `;
 
@@ -42,5 +44,12 @@ export const loginIcon = `
     <path d="M11.1193 2.99756C6.55993 3.45035 2.99902 7.29809 2.99902 11.9777C2.99902 16.9619 7.03855 21.0024 12.0216 21.0024C16.7 21.0024 20.5468 17.4407 20.9996 12.8802" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
     <path d="M20.5581 3.49381L11.0488 13.059" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
     <path d="M20.5581 3.49381C20.064 2.99905 16.7356 3.04517 16.032 3.05518M20.5581 3.49381C21.0521 3.98857 21.0061 7.3215 20.9961 8.02611" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+`;
+
+export const jupiterIcon = `
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="40" height="40" color="#ffffff" fill="none">
+    <path d="M8 16.5C9.10457 16.5 10 15.8284 10 15C10 14.1716 9.10457 13.5 8 13.5C6.89543 13.5 6 14.1716 6 15C6 15.8284 6.89543 16.5 8 16.5Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M21.2722 15.7522C17.6645 15.7468 14.7094 16.3604 11.5 18.5C9.91701 19.5553 8.40491 20.2626 7.10825 20.7239M21.2722 15.7522C21.7415 14.5935 22 13.3269 22 12C22 11.7639 21.9918 11.5298 21.9757 11.2978M21.2722 15.7522C19.7882 19.4158 16.1959 22 12 22C10.2231 22 8.55439 21.5365 7.10825 20.7239M21.9757 11.2978C16.9028 14.2476 14.3349 13.112 9 10C6.5627 8.57824 4.2801 8.55737 2.42713 9.09949M21.9757 11.2978C21.9128 10.39 21.7286 9.51555 21.4394 8.69054M21.4394 8.69054C20.0734 4.7941 16.363 2 12 2C9.46517 2 7.15062 2.94313 5.38812 4.49763M21.4394 8.69054C17.3788 8.69054 17.5 4.77488 12 6C8.4 6.8019 6.25875 5.16588 5.38812 4.49763M5.38812 4.49763C4.01187 5.71147 2.97222 7.29807 2.42713 9.09949M2.42713 9.09949C2.14934 10.0175 2 10.9913 2 12C2 15.7459 4.05965 19.0108 7.10825 20.7239" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
 </svg>
 `;
