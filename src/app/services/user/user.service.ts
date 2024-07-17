@@ -17,16 +17,15 @@ export class UserService {
     return new HttpHeaders().set('Authorization', `Bearer ${token}`);
   }
 
-  getUser(name: string): void {
+  getUser(name: string): Observable<void> {
     const headers = this.getAuthHeaders();
-    this.http
-      .get<User>(`https://authservicebackend.onrender.com/user/data/${name}`, {
+    return this.http
+      .get<void>(`https://authservicebackend.onrender.com/user/data/${name}`, {
         headers,
       })
       .pipe(
         tap(user => localStorage.setItem('currentUser', JSON.stringify(user)))
-      )
-      .subscribe();
+      );
   }
 
   getAllUsers(): Observable<User[]> {

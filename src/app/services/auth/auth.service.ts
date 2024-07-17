@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 import { LoginResponse, RegisterResponse } from '../../models/responses.model';
 import { UserService } from '../user/user.service';
 
@@ -28,13 +28,14 @@ export class AuthService {
     return this.http
       .post<LoginResponse>(this.LOGIN_URL, { name, password })
       .pipe(
-        map(response => {
+        switchMap(response => {
           if (response.jwt) {
             localStorage.setItem('token', response.jwt);
             const loginTime = new Date().toISOString();
             localStorage.setItem('loginTime', loginTime);
             this.authenticatedSubject.next(true);
           }
+          return this.userService.getUser(name).pipe();
         })
       );
   }
