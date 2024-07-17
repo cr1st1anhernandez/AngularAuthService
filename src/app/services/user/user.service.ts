@@ -78,9 +78,7 @@ export class UserService {
     return this.http.put<void>(
       'https://authservicebackend.onrender.com/user/block/all',
       null,
-      {
-        headers,
-      }
+      { headers }
     );
   }
 

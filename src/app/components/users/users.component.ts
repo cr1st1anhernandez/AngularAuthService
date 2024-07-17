@@ -4,6 +4,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { toast } from 'ngx-sonner';
 import { blockIcon, trashIcon, unblockIcon } from '../../icons/icons';
 import { User } from '../../models/user.model';
+import { AuthService } from '../../services/auth/auth.service';
 import { UserService } from '../../services/user/user.service';
 
 @Component({
@@ -21,7 +22,8 @@ export class UsersComponent implements OnInit {
   constructor(
     private sanitizer: DomSanitizer,
     private userService: UserService,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private authService: AuthService
   ) {
     this.blockIcon = this.sanitizer.bypassSecurityTrustHtml(blockIcon);
     this.unblockIcon = this.sanitizer.bypassSecurityTrustHtml(unblockIcon);
@@ -30,28 +32,6 @@ export class UsersComponent implements OnInit {
 
   ngOnInit(): void {
     this.getAllUsers();
-  }
-
-  getAllUsers(): void {
-    this.userService.getAllUsers().subscribe(
-      data => {
-        this.users = data.map(user => ({
-          ...user,
-          lastLogin: this.getLastLogin(),
-          createdAt: this.datePipe.transform(user.createdAt, 'short'),
-          status: user.active ? 'Active' : 'Blocked',
-          selected: false,
-        }));
-      },
-      error => {
-        console.error('Error fetching users', error);
-      }
-    );
-  }
-
-  getLastLogin(): string {
-    const loginTime = localStorage.getItem('loginTime');
-    return loginTime ? new Date(loginTime).toLocaleString() : 'short';
   }
 
   toggleSelectAll() {
@@ -71,53 +51,123 @@ export class UsersComponent implements OnInit {
     return this.users.filter(user => user.selected);
   }
 
-  blockUsers() {
-    const selectedUsers = this.getSelectedCheckboxes();
-    selectedUsers.forEach(user => {
-      this.userService.blockUser(user.id).subscribe(
-        () => {
-          user.status = 'Blocked';
-          user.active = false;
-          toast.success(`${user.name} has been blocked`);
-        },
-        error => {
-          console.error(`User ${user.name} already blocked`, error);
-          toast.error(`User ${user.name} already blocked`);
-        }
-      );
+  getCurrentUserId(): number {
+    const currentUser = localStorage.getItem('currentUser');
+    if (currentUser) {
+      const user = JSON.parse(currentUser);
+      return user.id;
+    }
+    return 0;
+  }
+
+  getAllUsers(): void {
+    this.userService.getAllUsers().subscribe({
+      next: data => {
+        this.users = data.map(user => ({
+          ...user,
+          lastLogin: this.getLastLogin(),
+          createdAt: this.datePipe.transform(user.createdAt, 'short'),
+          status: user.active ? 'Active' : 'Blocked',
+          selected: false,
+        }));
+      },
+      error: error => {
+        console.error('Error fetching users', error);
+      },
     });
   }
 
-  unblockUsers() {
-    const selectedUsers = this.getSelectedCheckboxes();
-    selectedUsers.forEach(user => {
-      this.userService.unblockUser(user.id).subscribe(
-        () => {
-          user.status = 'Active';
-          user.active = true;
-          toast.success(`${user.name} has been unblocked`);
-        },
-        error => {
-          console.error(`User ${user.name} already unblocked`, error);
-          toast.error(`User ${user.name} already unblocked`);
-        }
-      );
-    });
+  getLastLogin(): string {
+    const loginTime = localStorage.getItem('loginTime');
+    return loginTime ? new Date(loginTime).toLocaleString() : 'short';
   }
 
-  deleteUsers() {
-    const selectedUsers = this.getSelectedCheckboxes();
-    selectedUsers.forEach(user => {
-      this.userService.deleteUser(user.id).subscribe(
-        () => {
-          this.users = this.users.filter(u => u.id !== user.id);
-          toast.success(`${user.name} has been deleted`);
-        },
-        error => {
-          console.error(`Error deleting user ${user.name}`, error);
-          toast.error(`Error deleting user ${user.name}`);
+  isAllUsersSelected(): boolean {
+    return this.users.every(user => user.selected);
+  }
+
+  handleSuccess = (user?: User, action?: string) => {
+    if (action === 'delete') {
+      if (user) {
+        this.users = this.users.filter(u => u.id !== user.id);
+        toast.success(`${user.name} has been deleted`);
+        if (user.id === this.getCurrentUserId()) {
+          this.authService.logout();
         }
-      );
-    });
+      } else {
+        this.users = [];
+        this.authService.logout();
+        toast.success('All users have been deleted');
+      }
+    } else {
+      if (user) {
+        user.status = action === 'block' ? 'Blocked' : 'Active';
+        user.active = action === 'block' ? false : true;
+        if (user.id === this.getCurrentUserId() && action === 'block') {
+          this.authService.logout();
+        }
+        toast.success(`${user.name} has been ${action}`);
+      } else {
+        this.users.forEach(user => {
+          user.status = action === 'block' ? 'Blocked' : 'Active';
+          user.active = action === 'block' ? false : true;
+        });
+        toast.success(`All users have been ${action}`);
+        if (action === 'block') this.authService.logout();
+      }
+    }
+  };
+
+  handleError = (user?: User, action?: string) => (error: unknown) => {
+    const actionVerb =
+      action === 'block'
+        ? 'blocking'
+        : action === 'unblock'
+          ? 'unblocking'
+          : 'deleting';
+    const errorMessage = user
+      ? `Error ${actionVerb} user ${user.name}`
+      : `Error ${actionVerb} all users`;
+    console.error(errorMessage, error);
+    toast.error(errorMessage);
+  };
+
+  handleUserAction(action: 'block' | 'unblock' | 'delete') {
+    const selectedUsers = this.getSelectedCheckboxes();
+    if (selectedUsers.length <= 0) return;
+
+    const getUserServiceFunction = (user?: User) => {
+      if (action === 'block')
+        return user
+          ? this.userService.blockUser(user.id)
+          : this.userService.blockAllUsers();
+      if (action === 'unblock')
+        return user
+          ? this.userService.unblockUser(user.id)
+          : this.userService.unblockAllUsers();
+      if (action === 'delete')
+        return user
+          ? this.userService.deleteUser(user.id)
+          : this.userService.deleteAllUsers();
+      return null;
+    };
+
+    if (this.isAllUsersSelected()) {
+      const userService = getUserServiceFunction();
+      if (!userService) return;
+      userService.subscribe({
+        next: () => this.handleSuccess(undefined, action),
+        error: this.handleError(undefined, action),
+      });
+    } else {
+      selectedUsers.forEach(user => {
+        const userService = getUserServiceFunction(user);
+        if (!userService) return;
+        userService.subscribe({
+          next: () => this.handleSuccess(user, action),
+          error: this.handleError(user, action),
+        });
+      });
+    }
   }
 }

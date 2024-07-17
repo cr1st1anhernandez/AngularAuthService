@@ -3,15 +3,19 @@
   <div class="w-full flex flex-col gap-8">
     <div class="flex gap-2">
       <button
-        (click)="blockUsers()"
+        (click)="handleUserAction('block')"
         class="btn btn-primary flex gap-2 items-center p-2 text-xl">
         <span [innerHTML]="blockIcon"></span>
         Block
       </button>
-      <button (click)="unblockUsers()" class="btn btn-primary p-2 text-xl">
+      <button
+        (click)="handleUserAction('unblock')"
+        class="btn btn-primary p-2 text-xl">
         <span [innerHTML]="unblockIcon"></span>
       </button>
-      <button (click)="deleteUsers()" class="btn btn-error p-2 text-xl">
+      <button
+        (click)="handleUserAction('delete')"
+        class="btn btn-error p-2 text-xl">
         <span [innerHTML]="trashIcon"></span>
       </button>
     </div>
