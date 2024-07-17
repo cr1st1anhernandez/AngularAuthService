@@ -10,8 +10,10 @@ import { UserService } from '../user/user.service';
   providedIn: 'root',
 })
 export class AuthService {
-  private readonly LOGIN_URL = 'http://localhost:8080/auth/login';
-  private readonly REGISTER_URL = 'http://localhost:8080/auth/register';
+  private readonly LOGIN_URL =
+    'https://authservicebackend.onrender.com/auth/login';
+  private readonly REGISTER_URL =
+    'https://authservicebackend.onrender.com/auth/register';
   private authenticatedSubject = new BehaviorSubject<boolean>(
     this.isLoggedIn()
   );

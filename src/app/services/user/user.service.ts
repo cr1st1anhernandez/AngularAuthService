@@ -7,7 +7,8 @@ import { User } from '../../models/user.model';
   providedIn: 'root',
 })
 export class UserService {
-  private readonly USERS_URL = 'http://localhost:8080/user/all';
+  private readonly USERS_URL =
+    'https://authservicebackend.onrender.com/user/all';
 
   constructor(private http: HttpClient) {}
 
@@ -19,7 +20,9 @@ export class UserService {
   getUser(name: string): void {
     const headers = this.getAuthHeaders();
     this.http
-      .get<User>(`http://localhost:8080/user/data/${name}`, { headers })
+      .get<User>(`https://authservicebackend.onrender.com/user/data/${name}`, {
+        headers,
+      })
       .pipe(
         tap(user => localStorage.setItem('currentUser', JSON.stringify(user)))
       )
@@ -33,22 +36,29 @@ export class UserService {
 
   deleteUser(id: number): Observable<void> {
     const headers = this.getAuthHeaders();
-    return this.http.delete<void>(`http://localhost:8080/user/${id}`, {
-      headers,
-    });
+    return this.http.delete<void>(
+      `https://authservicebackend.onrender.com/user/${id}`,
+      {
+        headers,
+      }
+    );
   }
 
   blockUser(id: number): Observable<void> {
     const headers = this.getAuthHeaders();
-    return this.http.put<void>(`http://localhost:8080/user/block/${id}`, null, {
-      headers,
-    });
+    return this.http.put<void>(
+      `https://authservicebackend.onrender.com/user/block/${id}`,
+      null,
+      {
+        headers,
+      }
+    );
   }
 
   unblockUser(id: number): Observable<void> {
     const headers = this.getAuthHeaders();
     return this.http.put<void>(
-      `http://localhost:8080/user/unblock/${id}`,
+      `https://authservicebackend.onrender.com/user/unblock/${id}`,
       null,
       { headers }
     );
@@ -56,22 +66,33 @@ export class UserService {
 
   deleteAllUsers(): Observable<void> {
     const headers = this.getAuthHeaders();
-    return this.http.delete<void>('http://localhost:8080/user/all', {
-      headers,
-    });
+    return this.http.delete<void>(
+      'https://authservicebackend.onrender.com/user/all',
+      {
+        headers,
+      }
+    );
   }
 
   blockAllUsers(): Observable<void> {
     const headers = this.getAuthHeaders();
-    return this.http.put<void>('http://localhost:8080/user/block/all', null, {
-      headers,
-    });
+    return this.http.put<void>(
+      'https://authservicebackend.onrender.com/user/block/all',
+      null,
+      {
+        headers,
+      }
+    );
   }
 
   unblockAllUsers(): Observable<void> {
     const headers = this.getAuthHeaders();
-    return this.http.put<void>('http://localhost:8080/user/unblock/all', null, {
-      headers,
-    });
+    return this.http.put<void>(
+      'https://authservicebackend.onrender.com/user/unblock/all',
+      null,
+      {
+        headers,
+      }
+    );
   }
 }
