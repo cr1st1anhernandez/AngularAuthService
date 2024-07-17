@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { loginIcon } from '../icons/icons';
+import { loginIcon } from '../../icons/icons';
 
 @Component({
   selector: 'app-home',

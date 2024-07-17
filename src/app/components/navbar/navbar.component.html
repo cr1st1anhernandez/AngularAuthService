@@ -2,15 +2,21 @@
   <div class="navbar-start">
     <a class="btn btn-ghost text-xl" routerLink="/">Auth Service</a>
   </div>
-  <div *ngIf="!autenticated" class="navbar-end flex gap-2">
+  <div *ngIf="!authenticated" class="navbar-end flex gap-2">
     <a class="btn btn-primary btn-outline" routerLink="/auth/login">Login</a>
     <a class="btn btn-ghost" routerLink="/auth/register">Register</a>
   </div>
-  <div *ngIf="autenticated" class="navbar-end flex gap-2">
+  <div *ngIf="authenticated" class="navbar-end flex gap-2">
     <p class="text-neutral-200 hidden md:block">
       Hello,
-      <span class="font-bold"> John Lennon!</span>
+      <span class="font-bold"> {{ getUsername() }}</span>
     </p>
-    <a class="btn btn-success btn-ghost">LogOut</a>
+    <a
+      (click)="logout()"
+      tabindex="0"
+      (keyup.enter)="logout()"
+      class="btn btn-success btn-ghost"
+      >Logout</a
+    >
   </div>
 </div>

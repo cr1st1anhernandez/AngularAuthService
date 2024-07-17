@@ -1,0 +1,73 @@
+<div
+  class="bg-neutral-950 text-neutral-200 min-h-[100dvh] w-full grid place-items-center p-8">
+  <div class="w-full flex flex-col gap-8">
+    <div class="flex gap-2">
+      <button
+        (click)="blockUsers()"
+        class="btn btn-primary flex gap-2 items-center p-2 text-xl">
+        <span [innerHTML]="blockIcon"></span>
+        Block
+      </button>
+      <button (click)="unblockUsers()" class="btn btn-primary p-2 text-xl">
+        <span [innerHTML]="unblockIcon"></span>
+      </button>
+      <button (click)="deleteUsers()" class="btn btn-error p-2 text-xl">
+        <span [innerHTML]="trashIcon"></span>
+      </button>
+    </div>
+    <div class="w-80 md:w-full">
+      <div class="overflow-x-auto">
+        <table
+          class="min-w-full divide-y divide-neutral-700 rounded-md overflow-hidden">
+          <thead class="bg-neutral-800">
+            <tr class="text-neutral-200">
+              <th class="p-2 justify-center flex items-center">
+                <input
+                  type="checkbox"
+                  class="size-6"
+                  [(ngModel)]="selectAll"
+                  (change)="toggleSelectAll()" />
+              </th>
+              <th class="p-2 text-left">Name</th>
+              <th class="p-2 text-left">Email</th>
+              <th class="p-2 text-left">Created at</th>
+              <th class="p-2 text-left">Last login</th>
+              <th class="p-2 text-left">Status</th>
+            </tr>
+          </thead>
+          <tbody class="bg-neutral-900">
+            <tr *ngFor="let user of users" class="text-neutral-200">
+              <td class="p-2 flex justify-center items-center">
+                <input
+                  type="checkbox"
+                  class="size-6"
+                  [(ngModel)]="user.selected"
+                  (change)="checkboxChanged()" />
+              </td>
+              <td class="p-2">
+                {{ user.name }}
+              </td>
+              <td class="p-2">{{ user.email }}</td>
+              <td class="p-2 font-bold">{{ user.createdAt }}</td>
+              <td class="p-2 font-bold">{{ user.lastLogin }}</td>
+              <td
+                [ngClass]="{
+                  'text-emerald-600': user.status === 'Active',
+                  'text-rose-600': user.status === 'Blocked',
+                }"
+                class="p-2 flex gap-2 items-center">
+                <div
+                  class="rounded-full w-4 h-4"
+                  [ngClass]="{
+                    'bg-emerald-600': user.status === 'Active',
+                    'bg-rose-600': user.status === 'Blocked',
+                  }"></div>
+                {{ user.status }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

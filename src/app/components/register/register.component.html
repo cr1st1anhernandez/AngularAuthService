@@ -1,0 +1,140 @@
+<style>
+  .input-container {
+    display: flex;
+    align-items: center;
+    position: relative;
+    padding: 0.5rem;
+    width: 100%;
+    border: 2px solid #1c1c1c;
+    background-color: #121212;
+    border-radius: 0.375rem;
+  }
+
+  .input-container:focus-within {
+    border-color: #f0f0f0;
+  }
+
+  .input-container.invalid {
+    border-color: #f43f5e;
+  }
+
+  .error-message {
+    color: #f43f5e;
+    font-weight: bold;
+  }
+</style>
+
+<div
+  class="bg-neutral-950 text-neutral-200 min-h-[100dvh] grid place-items-center p-8">
+  <div class="bg-neutral-900 rounded-md py-8 px-4">
+    <h2 class="text-4xl font-bold text-neutral-200 text-center">Register</h2>
+    <form
+      [formGroup]="registerForm"
+      (ngSubmit)="onSubmit()"
+      class="p-4 flex gap-6 flex-col">
+      <div class="flex flex-col gap-1">
+        <label for="name" class="block text-neutral-200">Name</label>
+        <div
+          [ngClass]="{ 'input-container': true, invalid: isInvalid('name') }">
+          <input
+            type="text"
+            id="name"
+            formControlName="name"
+            class="w-full bg-transparent border-none outline-none" />
+        </div>
+        <p
+          *ngIf="
+            registerForm.get('name')?.hasError('required') &&
+            registerForm.get('name')?.touched
+          "
+          class="error-message">
+          Name is required
+        </p>
+        <p
+          *ngIf="
+            registerForm.get('name')?.hasError('minlength') &&
+            registerForm.get('name')?.touched
+          "
+          class="error-message">
+          At least 8 characters
+        </p>
+      </div>
+      <div class="flex flex-col gap-1">
+        <label for="email" class="block text-neutral-200">Email</label>
+        <div
+          [ngClass]="{ 'input-container': true, invalid: isInvalid('email') }">
+          <input
+            type="email"
+            id="email"
+            formControlName="email"
+            class="w-full bg-transparent border-none outline-none" />
+        </div>
+        <p
+          *ngIf="
+            registerForm.get('email')?.hasError('required') &&
+            registerForm.get('email')?.touched
+          "
+          class="error-message">
+          Email is required
+        </p>
+        <p
+          *ngIf="
+            registerForm.get('email')?.hasError('email') &&
+            registerForm.get('email')?.touched
+          "
+          class="error-message">
+          Invalid email address
+        </p>
+      </div>
+      <div class="flex flex-col gap-1">
+        <label for="password" class="block text-neutral-200">Password</label>
+        <div
+          [ngClass]="{
+            'input-container': true,
+            invalid: isInvalid('password'),
+          }">
+          <input
+            type="{{ hidePassword ? 'password' : 'text' }}"
+            id="password"
+            formControlName="password"
+            class="w-full bg-transparent border-none outline-none" />
+          <span
+            class="cursor-pointer"
+            [innerHTML]="hidePassword ? eyeOpenIcon : eyeClosedIcon"
+            (click)="togglePasswordVisibility()"
+            (keydown)="togglePasswordVisibility()"
+            tabindex="0"></span>
+        </div>
+        <p
+          *ngIf="
+            registerForm.get('password')?.hasError('required') &&
+            registerForm.get('password')?.touched
+          "
+          class="error-message">
+          Password is required
+        </p>
+        <ul
+          *ngIf="
+            registerForm.get('password')?.hasError('passwordInvalid') &&
+            registerForm.get('password')?.touched
+          "
+          class="list-disc list-inside text-rose-600 font-bold">
+          <li>8 characters long</li>
+          <li>at least one uppercase letter</li>
+          <li>at least one special character</li>
+        </ul>
+      </div>
+      <button type="submit" class="w-full text-xl p-2 btn btn-primary">
+        Register
+      </button>
+      <p class="text-neutral-400">
+        Already have an account?
+        <a
+          routerLink="/auth/login"
+          class="text-neutral-200 text-center font-bold cursor-pointer">
+          Login
+        </a>
+      </p>
+    </form>
+  </div>
+</div>

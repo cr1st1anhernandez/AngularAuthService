@@ -1,20 +1,31 @@
+import {
+  HTTP_INTERCEPTORS,
+  provideHttpClient,
+  withFetch,
+} from '@angular/common/http';
 import { NgModule } from '@angular/core';
-import { BrowserModule, provideClientHydration } from '@angular/platform-browser';
-
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { BrowserModule } from '@angular/platform-browser';
+import { NgxSonnerToaster } from 'ngx-sonner';
 import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
+import { AppComponent } from './components/app/app.component';
+import { ComponentsModule } from './components/components.module';
+import { AuthInterceptor } from './interceptors/auth.interceptor';
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    FormsModule,
+    ReactiveFormsModule,
+    AppRoutingModule,
+    ComponentsModule,
+    NgxSonnerToaster,
   ],
   providers: [
-    provideClientHydration()
+    provideHttpClient(withFetch()),
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
